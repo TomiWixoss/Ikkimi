@@ -1,8 +1,9 @@
-# 🎌 Ikkimi - Anime Streaming App
+# 🎌 Ikkimi - Modern Anime Streaming App
 
-> Ứng dụng xem anime miễn phí với khả năng scraping từ nhiều nguồn khác nhau, được xây dựng bằng Flutter.
+> Ứng dụng xem anime miễn phí với kiến trúc hiện đại, được xây dựng bằng Flutter + Riverpod + Clean Architecture (2026 Standard)
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.8.1-02569B?logo=flutter)](https://flutter.dev)
+[![Riverpod](https://img.shields.io/badge/Riverpod-2.6.1-purple)](https://riverpod.dev)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-blue.svg)](https://github.com/tomisakae/ikkimi)
 
@@ -39,9 +40,116 @@
 - [x] Skeleton loading
 - [x] Smooth animations
 
-## 📱 Screenshots
+## 🏗️ Kiến trúc - Clean Architecture + Riverpod (2026 Standard)
 
-_Coming soon..._
+### 📐 Tại sao Clean Architecture?
+
+Dự án này sử dụng **Clean Architecture + Riverpod**, được đánh giá là kiến trúc tốt nhất cho Flutter apps năm 2026 theo [Foresight Mobile Research](https://foresightmobile.com/blog/whats-the-best-state-management-library-for-flutter).
+
+**Ưu điểm:**
+- ✅ **Compile-time safety** - Phát hiện lỗi ngay khi code
+- ✅ **Testability** - Dễ dàng viết unit tests
+- ✅ **Scalability** - Dễ mở rộng khi dự án lớn
+- ✅ **Maintainability** - Code sạch, dễ maintain
+- ✅ **Future-proof** - Chuẩn mới nhất 2026
+
+### 🗂️ Cấu trúc thư mục
+
+```
+lib/
+├── core/                           # Core functionality
+│   ├── models/                     # Domain models (Anime, Episode)
+│   ├── providers/                  # Global providers (DI)
+│   └── router/                     # GoRouter configuration
+│
+├── features/                       # Feature-first architecture
+│   ├── home/
+│   │   ├── data/
+│   │   │   └── repositories/       # Repository implementation
+│   │   ├── domain/
+│   │   │   └── repositories/       # Repository interface
+│   │   └── presentation/
+│   │       ├── pages/              # UI screens
+│   │       ├── providers/          # Riverpod providers
+│   │       └── widgets/            # Reusable widgets
+│   │
+│   ├── anime_detail/               # Anime detail feature
+│   ├── watch/                      # Video player feature
+│   ├── search/                     # Search feature
+│   ├── library/                    # Library feature
+│   ├── history/                    # History feature
+│   └── settings/                   # Settings feature
+│
+└── main.dart                       # App entry point
+```
+
+### 🔄 Data Flow (Clean Architecture)
+
+```
+UI (Presentation) 
+    ↓ watches
+Provider (Riverpod)
+    ↓ calls
+Repository Interface (Domain)
+    ↓ implements
+Repository Implementation (Data)
+    ↓ fetches from
+API / Database
+```
+
+### 🎯 Layers Explained
+
+#### 1️⃣ **Presentation Layer** (`presentation/`)
+- UI components (Pages, Widgets)
+- Riverpod Providers
+- State management
+- **Không chứa business logic**
+
+#### 2️⃣ **Domain Layer** (`domain/`)
+- Business models (Anime, Episode)
+- Repository interfaces
+- Use cases (nếu cần)
+- **Không phụ thuộc vào framework**
+
+#### 3️⃣ **Data Layer** (`data/`)
+- Repository implementations
+- API services
+- Database operations
+- **Implement interfaces từ Domain**
+
+## 🛠️ Tech Stack
+
+### Core Framework
+- **Flutter 3.8.1** - Cross-platform UI framework
+- **Dart 3.8.1** - Programming language
+
+### State Management & Architecture (2026 Standard)
+- **Riverpod 2.6.1** - State management với compile-time safety
+- **GoRouter 14.6.2** - Declarative routing
+- **Clean Architecture** - Separation of concerns
+
+### UI Components
+- **Skeletonizer 2.1.2** - Modern loading skeleton
+- **Cached Network Image 3.4.1** - Image caching
+- **Extended Image 10.0.1** - Advanced image handling
+- **Carousel Slider Plus 7.0.1** - Image carousel
+- **Easy Refresh 3.4.0** - Pull to refresh
+- **Flutter Staggered Grid View 0.7.0** - Grid layouts
+
+### Network & Scraping
+- **Dio 5.7.0** - HTTP client
+- **HTML 0.15.4** - HTML parser
+- **WebView Flutter 4.10.0** - Embedded web player
+
+### Database
+- **Isar 3.1.0+1** - Fast NoSQL database
+
+### Features
+- **File Picker 10.3.10** - File selection
+- **Archive 4.0.7** - Backup compression
+- **Upgrader 12.5.0** - Auto update checker
+- **Flutter Downloader 1.11.10** - APK downloader
+- **Permission Handler 12.0.1** - Runtime permissions
 
 ## 🚀 Cài đặt
 
@@ -76,76 +184,79 @@ flutter build apk --release
 flutter build apk --split-per-abi --release
 ```
 
-## 🏗️ Cấu trúc Project
+## 📖 Hướng dẫn phát triển
 
+### Thêm feature mới
+
+1. **Tạo cấu trúc thư mục:**
 ```
-lib/
-├── app/
-│   ├── data/
-│   │   ├── models/          # Data models
-│   │   ├── providers/       # API providers
-│   │   └── repositories/    # Data repositories
-│   ├── modules/
-│   │   ├── home/           # Trang chủ
-│   │   ├── anime_detail/   # Chi tiết anime
-│   │   ├── watch/          # Xem anime
-│   │   ├── search/         # Tìm kiếm
-│   │   ├── library/        # Thư viện
-│   │   ├── history/        # Lịch sử
-│   │   └── settings/       # Cài đặt
-│   ├── routes/             # App routes
-│   └── core/
-│       ├── theme/          # App theme
-│       ├── utils/          # Utilities
-│       └── widgets/        # Shared widgets
-└── main.dart
+lib/features/new_feature/
+├── data/
+│   └── repositories/
+├── domain/
+│   └── repositories/
+└── presentation/
+    ├── pages/
+    ├── providers/
+    └── widgets/
 ```
 
-## 🛠️ Tech Stack
+2. **Tạo Repository Interface (Domain):**
+```dart
+// lib/features/new_feature/domain/repositories/feature_repository.dart
+abstract class FeatureRepository {
+  Future<Data> getData();
+}
+```
 
-### Core
-- **Flutter** - UI Framework
-- **GetX** - State Management & Navigation
-- **Isar** - Local Database (NoSQL)
+3. **Implement Repository (Data):**
+```dart
+// lib/features/new_feature/data/repositories/feature_repository_impl.dart
+class FeatureRepositoryImpl implements FeatureRepository {
+  @override
+  Future<Data> getData() async {
+    // Implementation
+  }
+}
+```
 
-### UI Components
-- **Skeletonizer** - Loading skeleton
-- **Cached Network Image** - Image caching
-- **Extended Image** - Advanced image handling
-- **Carousel Slider Plus** - Image carousel
-- **Easy Refresh** - Pull to refresh
+4. **Tạo Provider (Presentation):**
+```dart
+// lib/features/new_feature/presentation/providers/feature_provider.dart
+final featureProvider = FutureProvider<Data>((ref) async {
+  final repository = ref.watch(featureRepositoryProvider);
+  return repository.getData();
+});
+```
 
-### Network & Scraping
-- **Dio** - HTTP client
-- **HTML** - HTML parser
-- **WebView Flutter** - Embedded web player
+5. **Sử dụng trong UI:**
+```dart
+class FeaturePage extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final data = ref.watch(featureProvider);
+    
+    return data.when(
+      data: (value) => Text(value.toString()),
+      loading: () => CircularProgressIndicator(),
+      error: (error, stack) => Text('Error: $error'),
+    );
+  }
+}
+```
 
-### Features
-- **File Picker** - File selection
-- **Archive** - Backup compression
-- **Upgrader** - Auto update checker
-- **Flutter Downloader** - APK downloader
-- **Permission Handler** - Runtime permissions
+### Testing
 
-## 📖 Hướng dẫn sử dụng
+```bash
+# Run all tests
+flutter test
 
-### Thêm nguồn anime
-1. Mở Settings
-2. Chọn "Anime Sources"
-3. Thêm URL nguồn anime
-4. Lưu và reload
+# Run with coverage
+flutter test --coverage
 
-### Backup dữ liệu
-1. Mở Settings
-2. Chọn "Backup & Restore"
-3. Chọn "Create Backup"
-4. File backup sẽ được lưu vào Downloads
-
-### Restore dữ liệu
-1. Mở Settings
-2. Chọn "Backup & Restore"
-3. Chọn "Restore from File"
-4. Chọn file backup (.zip)
+# Run specific test
+flutter test test/features/home/home_test.dart
+```
 
 ## 🤝 Đóng góp
 
@@ -168,315 +279,18 @@ Dự án này được phân phối dưới giấy phép MIT. Xem file [LICENSE]
 ## 🙏 Credits
 
 - Inspired by [Tachiyomi](https://github.com/tachiyomiorg/tachiyomi)
+- Architecture based on [Foresight Mobile - Flutter State Management 2026](https://foresightmobile.com/blog/whats-the-best-state-management-library-for-flutter)
 - Icons by [Iconsax](https://iconsax.io/)
-- UI inspiration from various anime streaming apps
 
 ## 📧 Liên hệ
 
 - GitHub: [@tomisakae](https://github.com/tomisakae)
-- Email: your.email@example.com
+- Package: `com.tomisakae.ikkimi`
 
 ---
 
-Made with ❤️ by tomisakae
-
-## ✨ Tính năng chính
-
-- 📖 **Đọc truyện offline** - Tải và đọc truyện mà không cần internet
-- 🌐 **Web scraping** - Tự động lấy nội dung từ các website truyện
-- 📚 **Thư viện cá nhân** - Quản lý bộ sưu tập truyện của bạn
-- 📜 **Lịch sử đọc** - Theo dõi tiến độ và lịch sử đọc
-- ⚙️ **Tùy chỉnh đọc** - Thay đổi font, màu nền, kích thước chữ
-- 🎨 **Giao diện đẹp** - Material Design 3 với dark/light mode
-
-## 🏗️ Kiến trúc dự án
-
-### Cấu trúc thư mục
-
-```
-lib/
-├── main.dart                           # Entry point
-├── app/
-    ├── routes/                         # Navigation management
-    │   ├── app_pages.dart             # Route definitions & bindings
-    │   └── app_routes.dart            # Route constants
-    └── modules/                       # Feature modules (Clean Architecture)
-        ├── home/                      # Main navigation container
-        │   ├── controllers/           # Business logic
-        │   ├── bindings/             # Dependency injection
-        │   └── views/                # UI components
-        ├── library/                   # 📚 Thư viện truyện
-        ├── reader/                    # 📖 Trình đọc truyện
-        ├── history/                   # 📜 Lịch sử đọc
-        └── settings/                  # ⚙️ Cài đặt ứng dụng
-```
-
-### Nguyên tắc thiết kế
-
-#### 🎯 **Clean Architecture + MVC Pattern**
-
-- **Separation of Concerns**: Tách biệt UI, Business Logic và Data
-- **SOLID Principles**: Code dễ maintain và mở rộng
-- **Dependency Injection**: Quản lý dependencies tự động
-
-#### 📱 **Reactive Programming với GetX**
-
-```dart
-// State Management
-final novels = <Novel>[].obs;           // Observable data
-final isLoading = false.obs;            // Loading state
-
-// Reactive UI
-Obx(() => controller.isLoading.value
-  ? LoadingWidget()
-  : NovelGrid()
-)
-```
-
-#### 🔗 **Dependency Injection với Bindings**
-
-```dart
-class LibraryBinding extends Bindings {
-  @override
-  void dependencies() {
-    // Lazy loading - chỉ tạo khi cần
-    Get.lazyPut<LibraryController>(() => LibraryController());
-    Get.lazyPut<NovelService>(() => NovelService());
-  }
-}
-```
-
-## 🛠️ Tech Stack
-
-### Core Framework
-
-- **Flutter** - Cross-platform UI framework
-- **Dart** - Programming language
-
-### State Management & Navigation
-
-- **GetX** - State management, routing, dependency injection
-- **Get** - Navigation và dialog management
-
-### UI Components
-
-- **GetWidget** - Rich UI component library
-- **Google Nav Bar** - Modern bottom navigation
-- **Iconsax** - Beautiful icon set
-- **Material Design 3** - Modern design system
-
-### Data & Storage
-
-- **Hive** - Fast NoSQL database
-- **Hive Flutter** - Flutter integration
-- **Flutter Secure Storage** - Secure data storage
-
-### Network & Web Scraping
-
-- **Dio** - Powerful HTTP client
-- **HTML** - HTML parsing for web scraping
-- **Connectivity Plus** - Network status monitoring
-
-### UI Enhancements
-
-- **Shimmer** - Loading skeleton effects
-- **Liquid Pull to Refresh** - Beautiful refresh indicator
-- **Smooth Page Indicator** - Page indicators
-- **Auto Size Text** - Responsive text sizing
-- **Cached Network Image** - Image caching and optimization
-
-### Utilities
-
-- **URL Launcher** - Open external links
-- **Flutter SVG** - SVG image support
-
-## 🚀 Cài đặt và chạy dự án
-
-### Yêu cầu hệ thống
-
-- Flutter SDK >= 3.8.1
-- Dart SDK >= 3.0.0
-- Android Studio / VS Code
-- Git
-
-### Các bước cài đặt
-
-1. **Clone repository**
-
-```bash
-git clone https://github.com/your-username/ikkimi.git
-cd ikkimi
-```
-
-2. **Cài đặt dependencies**
-
-```bash
-flutter pub get
-```
-
-3. **Chạy code generation (cho Hive)**
-
-```bash
-flutter packages pub run build_runner build
-```
-
-4. **Chạy ứng dụng**
-
-```bash
-flutter run
-```
-
-## 📋 Scripts hữu ích
-
-```bash
-# Cài đặt dependencies
-flutter pub get
-
-# Chạy code generation
-flutter packages pub run build_runner build
-
-# Clean và rebuild
-flutter clean && flutter pub get
-
-# Chạy tests
-flutter test
-
-# Build APK
-flutter build apk --release
-
-# Build iOS
-flutter build ios --release
-```
-
-## 🏛️ Kiến trúc chi tiết
-
-### 📦 Module Structure
-
-Mỗi module trong dự án tuân theo pattern **MVC + Dependency Injection**:
-
-```
-module_name/
-├── controllers/           # Business Logic Layer
-│   └── module_controller.dart
-├── bindings/             # Dependency Injection
-│   └── module_binding.dart
-└── views/                # Presentation Layer
-    └── module_view.dart
-```
-
-### 🔄 Data Flow
-
-```
-User Action → View → Controller → Business Logic → Update State → View Auto-Update
-```
-
-### 🎯 Dependency Injection Flow
-
-```
-Route Called → Binding.dependencies() → Controller Created → View Uses Controller → Route Closed → Controller Auto-Disposed
-```
-
-## 📱 Screens Overview
-
-### 🏠 Home (Navigation Container)
-
-- **Controller**: Quản lý tab navigation
-- **View**: Google Nav Bar với 4 tabs
-- **Features**: Smooth transitions, state persistence
-
-### 📚 Library (Thư viện)
-
-- **Controller**: Quản lý danh sách truyện, CRUD operations
-- **View**: Grid layout với shimmer loading
-- **Features**: Search, filter, progress tracking
-
-### 📖 Reader (Trình đọc)
-
-- **Controller**: Quản lý nội dung, settings đọc
-- **View**: Customizable reading interface
-- **Features**: Font size, themes, chapter navigation
-
-### 📜 History (Lịch sử)
-
-- **Controller**: Tracking reading history
-- **View**: Timeline với swipe actions
-- **Features**: Progress tracking, continue reading
-
-### ⚙️ Settings (Cài đặt)
-
-- **Controller**: App preferences, data management
-- **View**: Organized settings groups
-- **Features**: Theme toggle, backup/restore, cache management
-
-## 🔧 Development Guidelines
-
-### 📝 Code Style
-
-- **Naming**: camelCase cho variables, PascalCase cho classes
-- **Comments**: Tiếng Việt cho business logic, English cho technical
-- **Structure**: Một file một class, tối đa 300 lines
-
-### 🧪 Testing Strategy
-
-```bash
-# Unit Tests - Business Logic
-test/unit/controllers/
-
-# Widget Tests - UI Components
-test/widget/views/
-
-# Integration Tests - Full Flow
-test/integration/
-```
-
-### 🚀 Performance Best Practices
-
-- **Lazy Loading**: Controllers chỉ tạo khi cần
-- **Memory Management**: Auto-dispose với GetX
-- **Image Caching**: CachedNetworkImage cho performance
-- **Database**: Hive cho fast local storage
-
-## 🤝 Contributing
-
-### 📋 Development Workflow
-
-1. **Fork** repository
-2. **Create** feature branch: `git checkout -b feature/amazing-feature`
-3. **Commit** changes: `git commit -m 'Add amazing feature'`
-4. **Push** branch: `git push origin feature/amazing-feature`
-5. **Open** Pull Request
-
-### 🐛 Bug Reports
-
-Sử dụng GitHub Issues với template:
-
-- **Environment**: Flutter version, device info
-- **Steps to reproduce**: Chi tiết các bước
-- **Expected vs Actual**: Kết quả mong đợi vs thực tế
-- **Screenshots**: Nếu có
-
-## 📄 License
-
-Dự án này được phân phối dưới MIT License. Xem `LICENSE` file để biết thêm chi tiết.
-
-## 👥 Team
-
-- **Developer**: Your Name
-- **UI/UX**: Design Team
-- **QA**: Testing Team
-
-## 🙏 Acknowledgments
-
-- **Flutter Team** - Amazing framework
-- **GetX Community** - Powerful state management
-- **Open Source Contributors** - All the amazing libraries
-
----
-
-<div align="center">
-  <p>Made with ❤️ and Flutter</p>
-  <p>⭐ Star this repo if you find it helpful!</p>
-</div>
-#   I k k i m i 
- 
- 
+Made with ❤️ using Flutter + Riverpod + Clean Architecture
+
+**Architecture:** Clean Architecture + Riverpod (2026 Standard)  
+**State Management:** Riverpod 2.6.1 (Compile-time safety)  
+**Routing:** GoRouter 14.6.2 (Declarative routing)

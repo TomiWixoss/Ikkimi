@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'app/routes/app_pages.dart';
+import 'core/router/app_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,7 +10,11 @@ void main() async {
   // final dir = await getApplicationDocumentsDirectory();
   // final isar = await Isar.open([AnimeSchema], directory: dir.path);
 
-  runApp(const IkkimiApp());
+  runApp(
+    const ProviderScope(
+      child: IkkimiApp(),
+    ),
+  );
 }
 
 class IkkimiApp extends StatelessWidget {
@@ -24,7 +27,7 @@ class IkkimiApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return GetMaterialApp(
+        return MaterialApp.router(
           title: 'Ikkimi',
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
@@ -49,8 +52,7 @@ class IkkimiApp extends StatelessWidget {
             ),
           ),
           themeMode: ThemeMode.system,
-          initialRoute: AppPages.INITIAL,
-          getPages: AppPages.routes,
+          routerConfig: appRouter,
           debugShowCheckedModeBanner: false,
         );
       },
