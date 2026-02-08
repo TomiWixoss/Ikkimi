@@ -1,4 +1,4 @@
-package com.example.linkstory
+package com.tomisakae.ikkimi
 
 import io.flutter.embedding.android.FlutterActivity
 
